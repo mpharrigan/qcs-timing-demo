@@ -1,0 +1,5 @@
+pyquil
+numpy
+matplotlib
+networkx
+pandas
