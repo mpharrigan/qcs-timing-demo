@@ -31,6 +31,8 @@ def run_point(qc: QuantumComputer, beta: float, gamma: float, q0: int, q1: int,
     :param q1: The index of the second qubit
     :param n_shots: The number of shots to take for this (beta, gamma) point.
     """
+
+    # Construct a program
     ising = generate_maxcut_ising(nx.from_edgelist([(0, 1)]))
     driver = sX(q0) + sX(q1)
     reward = sZ(q0) * sZ(q1) + 0  # add 0 to turn to PauliSum
@@ -41,9 +43,12 @@ def run_point(qc: QuantumComputer, beta: float, gamma: float, q0: int, q1: int,
     program += MEASURE(q0, ro[0])
     program += MEASURE(q1, ro[1])
     program = program.wrap_in_numshots_loop(shots=n_shots)
+
+    # Compile it
     nq_program = qc.compiler.quil_to_native_quil(program)
     executable = qc.compiler.native_quil_to_executable(nq_program)
 
+    # Run and post-process
     bitstrings = qc.run(executable)
     rewards = calculate_ising_rewards(ising, bitstrings)
     return np.mean(rewards)
