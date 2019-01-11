@@ -45,8 +45,7 @@ def get_parametric_program(qc: QuantumComputer, q0: int, q1: int,
     program += MEASURE(q1, ro[1])
     program = program.wrap_in_numshots_loop(shots=n_shots)
 
-    nq_program = qc.compiler.quil_to_native_quil(program)
-    executable = qc.compiler.native_quil_to_executable(nq_program)
+    executable = qc.compile(program)
     return executable, ising
 
 
@@ -66,9 +65,10 @@ def run_scan(fn: str, qc: QuantumComputer, q0: int, q1: int):
 
     start = time.time()
     for gamma in gammas:
-        bitstrings = qc.qam.write_memory(region_name='beta', value=beta) \
-            .write_memory(region_name='gamma', value=gamma) \
-            .run().wait().read_from_memory_region(region_name='ro')
+        bitstrings = qc.run(executable, memory_map={
+            'beta': [gamma],
+            'gamma': [gamma]
+        })
         rewards = calculate_ising_rewards(ising, bitstrings)
         exp_reward = np.mean(rewards)
         results.append({
@@ -80,7 +80,7 @@ def run_scan(fn: str, qc: QuantumComputer, q0: int, q1: int):
     tot_time = end - start
     print(f"Total time: {tot_time:.2f}s")
     time_per_iter = tot_time / len(gammas)
-    print(f"Time per iter: {time_per_iter*1000:.1f}ms")
+    print(f"Time per iter: {time_per_iter * 1000:.1f}ms")
     df = pd.DataFrame(results)
     df.to_json(fn)
 
