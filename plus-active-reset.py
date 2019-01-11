@@ -122,4 +122,4 @@ def main(qc, q0, q1):
 
 
 if __name__ == '__main__':
-    main(get_qc('Aspen-0-5Q-C'), q0=13, q1=14)
+    main(get_qc('Aspen-1-16Q-A'), q0=13, q1=14)
