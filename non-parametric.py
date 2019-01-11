@@ -75,7 +75,7 @@ def run_scan(fn: str, qc: QuantumComputer, q0: int, q1: int):
     tot_time = end - start
     print(f"Total time: {tot_time:.2f}s")
     time_per_iter = tot_time / len(gammas)
-    print(f"Time per iter: {time_per_iter * 1000:.1f}ms")
+    print(f"Time per iter: {time_per_iter*1000:.1f}ms")
     df = pd.DataFrame(results)
     df.to_json(fn)
 
