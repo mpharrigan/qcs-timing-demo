@@ -45,8 +45,7 @@ def get_parametric_program(qc: QuantumComputer, q0: int, q1: int,
     program += MEASURE(q1, ro[1])
     program = program.wrap_in_numshots_loop(shots=n_shots)
 
-    nq_program = qc.compiler.quil_to_native_quil(program)
-    executable = qc.compiler.native_quil_to_executable(nq_program)
+    executable = qc.compile(program)
     return executable, ising
 
 
