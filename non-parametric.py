@@ -45,8 +45,7 @@ def run_point(qc: QuantumComputer, beta: float, gamma: float, q0: int, q1: int,
     program = program.wrap_in_numshots_loop(shots=n_shots)
 
     # Compile it
-    nq_program = qc.compiler.quil_to_native_quil(program)
-    executable = qc.compiler.native_quil_to_executable(nq_program)
+    executable = qc.compile(program)
 
     # Run and post-process
     bitstrings = qc.run(executable)
