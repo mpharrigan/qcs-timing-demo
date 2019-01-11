@@ -61,7 +61,6 @@ def run_scan(fn: str, qc: QuantumComputer, q0: int, q1: int):
     gammas = np.linspace(0, np.pi, 50)
     beta = np.pi / 8
     executable, ising = get_parametric_program(qc, q0, q1)
-    qc.qam.load(executable)
 
     start = time.time()
     for gamma in gammas:
